@@ -6,9 +6,14 @@ const registerUser = async (req, res) => {
   try {
     const { name, email, password, adminKey } = req.body;
 
+    console.log("========== REGISTER REQUEST ==========");
+    console.log("Received adminKey:", adminKey);
+    console.log("Expected ADMIN_KEY:", process.env.ADMIN_KEY);
+    console.log("=====================================");
+
     if (adminKey !== process.env.ADMIN_KEY) {
       return res.status(401).json({
-        message: "Invalid Admin Key"
+        message: "Invalid Admin Key",
       });
     }
 
@@ -16,7 +21,7 @@ const registerUser = async (req, res) => {
 
     if (userExists) {
       return res.status(400).json({
-        message: "User already exists"
+        message: "User already exists",
       });
     }
 
@@ -25,16 +30,17 @@ const registerUser = async (req, res) => {
     const user = await User.create({
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
     });
 
     res.status(201).json({
-      message: "User registered successfully"
+      message: "User registered successfully",
     });
-
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -47,7 +53,7 @@ const loginUser = async (req, res) => {
 
     if (!user) {
       return res.status(400).json({
-        message: "User not found"
+        message: "User not found",
       });
     }
 
@@ -58,14 +64,14 @@ const loginUser = async (req, res) => {
 
     if (!isMatch) {
       return res.status(400).json({
-        message: "Invalid credentials"
+        message: "Invalid credentials",
       });
     }
 
     const token = jwt.sign(
       {
         id: user._id,
-        role: user.role
+        role: user.role,
       },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
@@ -73,17 +79,18 @@ const loginUser = async (req, res) => {
 
     res.status(200).json({
       token,
-      user
+      user,
     });
-
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
-      message: error.message
+      message: error.message,
     });
   }
 };
 
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
 };
