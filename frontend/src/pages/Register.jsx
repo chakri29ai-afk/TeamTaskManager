@@ -23,14 +23,15 @@ function Register() {
 
       navigate("/");
     } catch (error) {
-  console.log(error);
+      console.log(error);
 
-  alert(
-    error.response?.data?.message ||
-    error.message ||
-    "Registration Failed"
-  );
-}
+      alert(
+        error.response?.data?.message ||
+        error.message ||
+        "Registration Failed"
+      );
+    }
+  };
 
   return (
     <div
@@ -39,7 +40,7 @@ function Register() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "linear-gradient(135deg, #0f172a, #1e293b)",
+        background: "linear-gradient(135deg, #0f172a,#1e293b)",
       }}
     >
       <div
