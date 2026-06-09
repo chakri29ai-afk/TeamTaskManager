@@ -23,13 +23,14 @@ function Register() {
 
       navigate("/");
     } catch (error) {
-      alert(
-        error.response?.data?.message ||
-        "Registration Failed"
-      );
-      console.log(error);
-    }
-  };
+  console.log(error);
+
+  alert(
+    error.response?.data?.message ||
+    error.message ||
+    "Registration Failed"
+  );
+}
 
   return (
     <div
