@@ -10,6 +10,7 @@ const taskRoutes = require("./routes/taskRoutes");
 const protect = require("./middleware/authMiddleware");
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -20,32 +21,29 @@ app.use("/auth", authRoutes);
 app.use("/projects", projectRoutes);
 app.use("/tasks", taskRoutes);
 
+// Home Route
 app.get("/", (req, res) => {
   res.send("Team Task Manager Backend Running Successfully");
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
 });
 
 // Protected Route
 app.get("/profile", protect, (req, res) => {
   res.json({
     message: "Protected Route Accessed",
-    user: req.user
+    user: req.user,
   });
 });
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
-.then(() => {
-  console.log("MongoDB Connected");
-})
-.catch((err) => {
-  console.log(err);
-});
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB Connected");
 
-// Start Server
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
-});
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
